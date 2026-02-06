@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: traffic_db
+    environment:
+      POSTGRES_USER: traffic
+      POSTGRES_PASSWORD: traffic
+      POSTGRES_DB: traffic_predictor
+    ports:
+      - "5432:5432"
+    volumes:
+      - traffic_pgdata:/var/lib/postgresql/data
+
+volumes:
+  traffic_pgdata:
