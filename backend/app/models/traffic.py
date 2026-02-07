@@ -9,7 +9,6 @@ class Segment(Base):
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     city: Mapped[str | None] = mapped_column(String(120), nullable=True)
 
-    # optional geometry fields for mapping later
     start_lat: Mapped[float | None] = mapped_column(Float, nullable=True)
     start_lng: Mapped[float | None] = mapped_column(Float, nullable=True)
     end_lat: Mapped[float | None] = mapped_column(Float, nullable=True)
