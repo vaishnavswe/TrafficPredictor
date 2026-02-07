@@ -3,6 +3,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.db import Base
 
 class Segment(Base):
+    # road segment we're tracking
+    # has start/end coords for mapping
     __tablename__ = "segments"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -19,6 +21,8 @@ class Segment(Base):
     predictions: Mapped[list["Prediction"]] = relationship(back_populates="segment")
 
 class PredictionRun(Base):
+    # tracks each time we run the model
+    # so we can compare different models or versions
     __tablename__ = "prediction_runs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -30,6 +34,8 @@ class PredictionRun(Base):
     predictions: Mapped[list["Prediction"]] = relationship(back_populates="run")
 
 class Prediction(Base):
+    # actual prediction values
+    # unique constraint prevents duplicate predictions
     __tablename__ = "predictions"
     __table_args__ = (
         UniqueConstraint("segment_id", "timestamp", "horizon_minutes", "run_id", name="uq_pred_key"),
@@ -39,7 +45,9 @@ class Prediction(Base):
     segment_id: Mapped[int] = mapped_column(ForeignKey("segments.id"), nullable=False)
     run_id: Mapped[int] = mapped_column(ForeignKey("prediction_runs.id"), nullable=False)
 
-    timestamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)  # “time predicted for”
+    # timestamp is the time we're predicting FOR
+    # not when the prediction was made
+    timestamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
     horizon_minutes: Mapped[int] = mapped_column(Integer, nullable=False)
     predicted_speed: Mapped[float] = mapped_column(Float, nullable=False)
 

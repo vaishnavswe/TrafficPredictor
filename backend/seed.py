@@ -7,11 +7,14 @@ from app.models.traffic import Segment, PredictionRun, Prediction
 def main():
     db: Session = SessionLocal()
 
+    # wipe everything
+    # order matters because of foreign keys
     db.query(Prediction).delete()
     db.query(PredictionRun).delete()
     db.query(Segment).delete()
     db.commit()
 
+    # add a couple test segments
     s1 = Segment(
         name="Mass Ave → Back Bay",
         city="Boston",
@@ -29,11 +32,14 @@ def main():
     db.refresh(s1)
     db.refresh(s2)
 
+    # create test prediction run
     run = PredictionRun(model_name="baseline_demo", dataset="demo", horizon_minutes=30)
     db.add(run)
     db.commit()
     db.refresh(run)
 
+    # timestamp for predictions
+    # round to the hour so query results are consistent
     ts = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
 
     preds = [

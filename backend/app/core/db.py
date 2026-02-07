@@ -9,6 +9,8 @@ engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 def get_db():
+    # dependency injection for fastapi
+    # ensures db session closes after each request
     db = SessionLocal()
     try:
         yield db
