@@ -1,0 +1,2 @@
+# no js or python dependencies detected in frontend
+# add requirements here if you add scripts later

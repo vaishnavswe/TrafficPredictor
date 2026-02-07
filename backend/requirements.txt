@@ -1,0 +1,5 @@
+fastapi
+sqlalchemy
+pydantic
+psycopg2
+alembic
